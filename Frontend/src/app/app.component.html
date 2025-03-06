@@ -1,0 +1,121 @@
+<div class="min-h-screen text-white p-6">
+  <header class="flex justify-between items-center mb-6">
+    <h1 class="sm:text-2xl font-semibold font-mono ">Notes app</h1>
+    <div class="flex-1 max-w-2xl mx-4">
+      <div class="relative">
+        <input 
+          type="text"
+          id="searchTerm" 
+          placeholder="Search in title or content" 
+          class="w-full bg-purple-100 rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"
+          [(ngModel)]="filter.searchTerm"
+          (change)="applyFilter()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+    </div>
+    <button 
+      (click)="addNote()" 
+      class="bg-purple-200 hover:bg-purple-600 hover:text-white text-purple-800 font-bold py-2 px-4 rounded-full flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Add note
+    </button>
+  </header>
+  <app-new-edit-note-modal
+    [isOpen]="isNoteModalOpen"
+    [note]="selectedNote"
+    [availableTags]="tags"
+    (close)="closeNoteModal()"
+    (saved)="onNoteSaved()">
+  </app-new-edit-note-modal>
+  <div class="flex justify-between items-center mb-6 text-purple-100">
+    <div class="border border-purple-200 rounded-full p-1">
+      <button 
+        (click)="setView('true')" 
+        [class.bg-purple-200]="activeView === 'true'"
+        [class.text-purple-950]="activeView === 'true'"
+        class="py-1 px-4 rounded-full focus:outline-none">
+        <svg *ngIf="activeView === 'true'" class="h-5 w-5 inline-block mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
+        </svg>
+        Active
+      </button>
+      <button 
+        (click)="setView('false')" 
+        [class.bg-purple-200]="activeView === 'false'"
+        [class.text-purple-950]="activeView === 'false'"
+        class="py-1 px-4 rounded-full focus:outline-none">
+      <svg *ngIf="activeView === 'false'" class="h-5 w-5 inline-block mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+      </svg>
+        Archived
+      </button>
+    </div>
+    <div class="flex items-center">
+      <div class="relative inline-block text-left">
+        <div>
+          <button type="button" (click)="toggleDropdown()" class="bg-purple-200 hover:bg-purple-800 p-2 rounded-full text-purple-800 hover:text-white inline-flex" id="options-menu-button" aria-expanded="true" aria-haspopup="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      
+        <div *ngIf="isDropdownOpen" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div class="py-1" role="none" id="options-menu">
+            <div class="flex items-center px-4 py-2">
+              <input type="text" [(ngModel)]="newTagName" placeholder="New tag" class="py-0.5 px-0.5 form-input w-full rounded-lg text-black border-black border shadow-sm sm:text-sm">
+              <button (click)="createTag()" class="ml-2 bg-purple-200 hover:bg-purple-600 hover:text-white text-purple-900 font-bold py-1 px-2 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5  " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
+            </div>
+            <ng-container *ngFor="let tag of tags">
+              <div class="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">
+                <label class="flex items-center">
+                  <input type="checkbox" class="form-checkbox" [value]="tag.id" (change)="onTagChange($event)" />
+                  <span class="ml-2">{{ tag.name }}</span>
+                </label>
+                <button (click)="deleteTag(tag.id)" class="text-red-500 hover:text-red-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+    <div *ngFor="let note of notes" class="bg-gray-100 rounded-xl p-6 relative h-48 flex flex-col hover:scale-105 transition-all duration-300" (click)="editNote(note)">
+      <h2 class="text-gray-800 font-bold text-lg mb-2 line-clamp-2">{{ note.title || 'Untitled' }}</h2>
+      <p class="text-gray-600 text-sm line-clamp-4">{{ note.content }}</p>
+      <div class="absolute bottom-2 right-2 flex">
+        <button (click)="updateNoteStatus(note.id, !note.status); $event.stopPropagation()" class="text-gray-700 hover:text-gray-900 mr-2">
+          <svg *ngIf="activeView === 'true'" class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11v5m0 0 2-2m-2 2-2-2M3 6v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Zm2 2v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8H5Z"/>
+          </svg>
+
+          <svg *ngIf="activeView === 'false'" class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
+          </svg>
+        </button>
+        <button (click)="deleteNote(note.id);$event.stopPropagation()" class="text-red-500 hover:text-red-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
