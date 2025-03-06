@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendNotes", "BackendNotes\BackendNotes.csproj", "{A7CD7282-C97B-4D8E-B0F3-DE9EFEC4772D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7CD7282-C97B-4D8E-B0F3-DE9EFEC4772D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CD7282-C97B-4D8E-B0F3-DE9EFEC4772D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CD7282-C97B-4D8E-B0F3-DE9EFEC4772D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CD7282-C97B-4D8E-B0F3-DE9EFEC4772D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {465D55E1-0581-4613-8354-AA316CF3D4C9}
+	EndGlobalSection
+EndGlobal
