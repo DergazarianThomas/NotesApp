@@ -19,3 +19,4 @@ An SPA (Single page application) dedicated to making notes, administrating them 
 - Swashbuckle.AspNetCore [6.6.2]
 - SQL server
 
+To run this project, you can make use of the run-app.sh file through Git bash and using the command "./run-app.sh".
